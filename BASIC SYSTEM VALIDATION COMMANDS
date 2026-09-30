@@ -1,0 +1,115 @@
+# ============================================================
+# RED HAT LINUX - BASIC SYSTEM VALIDATION COMMANDS
+# ============================================================
+
+
+# ============================================================
+# 1. NETWORK
+# ============================================================
+
+# Show interfaces and IP addresses
+ip addr show
+
+# Show interface status
+ip link show
+
+# Show routing table and default gateway
+ip route
+
+# Show DNS configuration
+cat /etc/resolv.conf
+
+# Test network connectivity
+ping -c 4 <hostname_or_ip>
+
+# Show listening TCP/UDP ports and associated processes
+ss -tulpn
+
+# Show NetworkManager connection status
+nmcli connection show
+
+# Show NetworkManager device status
+nmcli device status
+
+
+# ============================================================
+# 2. DISK / STORAGE
+# ============================================================
+
+# Show filesystem usage
+df -h
+
+# Show filesystem types and usage
+df -Th
+
+# Show disks, partitions, sizes, filesystem types, and mount points
+lsblk -o NAME,SIZE,TYPE,FSTYPE,MOUNTPOINT
+
+# Show filesystem UUIDs and types
+blkid
+
+# Show mounted filesystems
+mount
+
+# Show size of a specific directory
+du -sh /path/to/directory
+
+
+# ============================================================
+# 3. MEMORY
+# ============================================================
+
+# Show memory and swap usage
+free -h
+
+# Show detailed memory information
+cat /proc/meminfo
+
+# Show current system activity including CPU and memory
+top
+
+# Show virtual memory statistics
+vmstat 1 5
+
+# Show processes using the most memory
+ps aux --sort=-%mem | head -20
+
+
+# ============================================================
+# 4. ARCHIVE - VERBOSE OUTPUT
+# ============================================================
+
+# Check source directory size before archiving
+du -sh /path/to/directory
+
+# Check available destination filesystem space
+df -h /path/to/destination
+
+# Create gzip-compressed TAR archive with VERBOSE output
+# -c = create
+# -z = gzip compression
+# -v = verbose - display each file being archived
+# -f = archive filename
+tar -czvf /path/to/destination/archive.tar.gz /path/to/directory
+
+# Confirm archive was created and display its size
+ls -lh /path/to/destination/archive.tar.gz
+
+# Display archive contents with VERBOSE output without extracting
+tar -tzvf /path/to/destination/archive.tar.gz
+
+# Validate that the archive can be read
+tar -tzf /path/to/destination/archive.tar.gz > /dev/null
+
+# Display the return code from the validation
+# 0 normally indicates the previous command completed successfully
+echo $?
+
+# Generate SHA-256 checksum for integrity verification
+sha256sum /path/to/destination/archive.tar.gz
+
+# Extract archive with VERBOSE output
+tar -xzvf /path/to/destination/archive.tar.gz
+
+# Extract to a specific destination with VERBOSE output
+tar -xzvf /path/to/destination/archive.tar.gz -C /path/to/extraction/directory
