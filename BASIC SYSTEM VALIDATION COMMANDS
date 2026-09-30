@@ -1,115 +1,105 @@
 # ============================================================
-# RED HAT LINUX - BASIC SYSTEM VALIDATION COMMANDS
+# RED HAT LINUX - BASIC SYSTEM VALIDATION
+# Network | Disk | Memory | Archive
 # ============================================================
 
 
 # ============================================================
-# 1. NETWORK
+# NETWORK - READ-ONLY
 # ============================================================
 
-# Show interfaces and IP addresses
+# Display network interfaces and assigned IP addresses
 ip addr show
 
-# Show interface status
+# Display network interface state
 ip link show
 
-# Show routing table and default gateway
+# Display routing table and default gateway
 ip route
 
-# Show DNS configuration
+# Display DNS configuration
 cat /etc/resolv.conf
 
-# Test network connectivity
-ping -c 4 <hostname_or_ip>
-
-# Show listening TCP/UDP ports and associated processes
+# Display listening TCP/UDP ports and associated processes
 ss -tulpn
 
-# Show NetworkManager connection status
-nmcli connection show
-
-# Show NetworkManager device status
+# Display NetworkManager device status
 nmcli device status
 
 
 # ============================================================
-# 2. DISK / STORAGE
+# DISK / STORAGE - READ-ONLY
 # ============================================================
 
-# Show filesystem usage
+# Display filesystem capacity and available space
 df -h
 
-# Show filesystem types and usage
+# Display filesystem type, capacity, and available space
 df -Th
 
-# Show disks, partitions, sizes, filesystem types, and mount points
+# Display disks, partitions, sizes, filesystem types, and mount points
 lsblk -o NAME,SIZE,TYPE,FSTYPE,MOUNTPOINT
 
-# Show filesystem UUIDs and types
+# Display filesystem UUID and filesystem type information
 blkid
 
-# Show mounted filesystems
+# Display currently mounted filesystems
 mount
 
-# Show size of a specific directory
-du -sh /path/to/directory
+# Display disk usage for directories at the current location
+du -sh ./* 2>/dev/null
 
 
 # ============================================================
-# 3. MEMORY
+# MEMORY - READ-ONLY
 # ============================================================
 
-# Show memory and swap usage
+# Display total, used, available memory, and swap
 free -h
 
-# Show detailed memory information
+# Display detailed kernel memory information
 cat /proc/meminfo
 
-# Show current system activity including CPU and memory
+# Display CPU, memory, processes, and system load
 top
 
-# Show virtual memory statistics
+# Display virtual memory statistics
+# Collect 5 samples at 1-second intervals
 vmstat 1 5
 
-# Show processes using the most memory
+# Display top memory-consuming processes
 ps aux --sort=-%mem | head -20
 
 
 # ============================================================
-# 4. ARCHIVE - VERBOSE OUTPUT
+# ARCHIVE - VERBOSE
 # ============================================================
 
-# Check source directory size before archiving
-du -sh /path/to/directory
+# Display size of the source directory before archiving
+du -sh /path/to/source
 
-# Check available destination filesystem space
+# Display available filesystem space at the archive destination
 df -h /path/to/destination
 
-# Create gzip-compressed TAR archive with VERBOSE output
-# -c = create
-# -z = gzip compression
-# -v = verbose - display each file being archived
-# -f = archive filename
-tar -czvf /path/to/destination/archive.tar.gz /path/to/directory
+# Create a gzip-compressed archive with verbose output
+# c = Create archive
+# z = gzip compression
+# v = Verbose output - displays each file being processed
+# f = Specify archive filename
+tar -czvf /path/to/destination/archive.tar.gz /path/to/source
 
-# Confirm archive was created and display its size
+# Confirm the archive was created and display its size
 ls -lh /path/to/destination/archive.tar.gz
 
-# Display archive contents with VERBOSE output without extracting
+# Display archive contents with verbose output WITHOUT extracting
 tar -tzvf /path/to/destination/archive.tar.gz
 
-# Validate that the archive can be read
+# Validate that the archive can be read WITHOUT extracting
 tar -tzf /path/to/destination/archive.tar.gz > /dev/null
 
-# Display the return code from the validation
-# 0 normally indicates the previous command completed successfully
+# Display the result from the validation command
+# 0 = Successful
 echo $?
 
-# Generate SHA-256 checksum for integrity verification
+# Generate SHA-256 checksum for integrity validation
 sha256sum /path/to/destination/archive.tar.gz
-
-# Extract archive with VERBOSE output
-tar -xzvf /path/to/destination/archive.tar.gz
-
-# Extract to a specific destination with VERBOSE output
-tar -xzvf /path/to/destination/archive.tar.gz -C /path/to/extraction/directory
